@@ -5,6 +5,7 @@ Version:	2.4.2
 Release:	1
 URL:		http://www.opalvoip.org/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.4/%{name}-%{version}.tar.bz2
+# Source0-md5:	47ba7da2a339643d5f5406215d457d5a
 License:	MPLv1.0
 Group:		Libraries
 BuildRequires:	bison
