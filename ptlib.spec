@@ -2,7 +2,7 @@
 Summary:	Portable Tools Library
 Name:		ptlib
 Version:	2.4.2
-Release:	1
+Release:	2
 URL:		http://www.opalvoip.org/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.4/%{name}-%{version}.tar.bz2
 # Source0-md5:	47ba7da2a339643d5f5406215d457d5a
@@ -48,6 +48,7 @@ Summary:	Alsa audio plugin
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-sound
+Obsoletes:	pwlib-sound-alsa
 
 %description sound-alsa
 Alsa audio plugin.
@@ -57,6 +58,7 @@ Summary:	OSS audio plugin
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-sound
+Obsoletes:	pwlib-sound-oss
 
 %description sound-oss
 OSS audio plugin.
@@ -73,6 +75,7 @@ v4l video input plugin.
 Summary:	v4l2 video input plugin
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	pwlib-video-v4l2
 
 %description video-v4l2
 v4l2 video input plugin.
