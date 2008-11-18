@@ -1,3 +1,5 @@
+# TODO:
+#	more, more BR
 #
 Summary:	Portable Tools Library
 Name:		ptlib
@@ -8,8 +10,10 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.4/%{name}-%{version}.tar
 # Source0-md5:	47ba7da2a339643d5f5406215d457d5a
 License:	MPLv1.0
 Group:		Libraries
+BuildRequires:	alsa-lib-devel
 BuildRequires:	bison
 BuildRequires:	flex
+BuildRequires:	libstdc++-devel
 #BuildRequires:	libavc1394-devel
 #BuildRequires:	libdc1394-devel < 2.0.0
 Obsoletes:	pwlib
