@@ -1,5 +1,5 @@
 # TODO:
-#	more, more BR
+#	IPv6 support disabled ('NULL' undeclared)
 #
 Summary:	Portable Tools Library
 Name:		ptlib
@@ -10,12 +10,19 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.4/%{name}-%{version}.tar
 # Source0-md5:	47ba7da2a339643d5f5406215d457d5a
 License:	MPLv1.0
 Group:		Libraries
+BuildRequires:	SDL-devel
 BuildRequires:	alsa-lib-devel
 BuildRequires:	bison
+BuildRequires:	esound-devel
+BuildRequires:	expat-devel
 BuildRequires:	flex
 BuildRequires:	libstdc++-devel
 #BuildRequires:	libavc1394-devel
 #BuildRequires:	libdc1394-devel < 2.0.0
+BuildRequires:	openssl-devel
+BuildRequires:	openldap-devel
+BuildRequires:	pkgconfig
+BuildRequires:	unixODBC-devel
 Obsoletes:	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -56,6 +63,15 @@ Obsoletes:	pwlib-sound-alsa
 
 %description sound-alsa
 Alsa audio plugin.
+
+%package sound-esd
+Summary:	Esound audio plugin
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}-sound
+
+%description sound-esd
+Esound audio plugin.
 
 %package sound-oss
 Summary:	OSS audio plugin
@@ -98,9 +114,11 @@ v4l2 video input plugin.
 %build
 %configure \
 		--prefix=%{_prefix} \
+		--enable-alsa \
 		--enable-static \
 		--enable-opal \
 		--enable-plugins \
+		--enable-esd \
 		--enable-oss \
 		--enable-v4l2 \
 		--enable-v4l \
@@ -162,6 +180,10 @@ rm -rf $RPM_BUILD_ROOT
 %files sound-alsa
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/alsa_pwplugin.so
+
+%files sound-esd
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/esd_pwplugin.so
 
 %files sound-oss
 %defattr(644,root,root,755)
