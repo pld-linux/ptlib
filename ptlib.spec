@@ -5,7 +5,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.6.5
-Release:	1
+Release:	2
 URL:		http://www.opalvoip.org/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.6/%{name}-%{version}.tar.bz2
 # Source0-md5:	db7fd581b66998cd76d96f8b7c3f22a1
@@ -161,6 +161,9 @@ v4l2 wejściowa wtyczka wideo.
 		--enable-oss \
 		--enable-v4l2 \
 		--enable-v4l \
+		--enable-http \
+		--enable-httpforms \
+		--enable-httpsvc \
 		--disable-avc \
 		--disable-dc \
 		--enable-debug
