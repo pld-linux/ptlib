@@ -5,7 +5,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.6.5
-Release:	7
+Release:	8
 URL:		http://www.opalvoip.org/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.6/%{name}-%{version}.tar.bz2
 # Source0-md5:	db7fd581b66998cd76d96f8b7c3f22a1
@@ -205,7 +205,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpt*.so
-%{_datadir}/pwlib
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/make
 %attr(755,root,root) %{_bindir}/*
