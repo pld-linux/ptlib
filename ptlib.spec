@@ -5,7 +5,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.6.5
-Release:	6
+Release:	7
 URL:		http://www.opalvoip.org/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.6/%{name}-%{version}.tar.bz2
 # Source0-md5:	db7fd581b66998cd76d96f8b7c3f22a1
@@ -24,8 +24,6 @@ BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
 BuildRequires:	unixODBC-devel
-Provides:	pwlib = %{version}-%{release}
-Obsoletes:	pwlib
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -55,8 +53,6 @@ Summary:	PTLib (Portable Tools Library) development files
 Summary(pl.UTF-8):	PTLib pliki deweloperskie
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Provides:	pwlib-devel = %{version}-%{release}
-Obsoletes:	pwlib-devel
 
 
 %description devel
@@ -70,8 +66,6 @@ Summary:	PTLib (Portable Tools Library) static libraries
 Summary(pl.UTF-8):	Biblioteki statyczne PTLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
-Provides:	pwlib-static = %{version}-%{release}
-Obsoletes:	pwlib-static
 
 
 %description static
@@ -86,7 +80,6 @@ Summary(pl.UTF-8):	Alsa wtyczka audio
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-sound
-Obsoletes:	pwlib-sound-alsa
 
 %description sound-alsa
 Alsa audio plugin.
@@ -113,7 +106,6 @@ Summary(pl.UTF-8): OSS wtyczka audio
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-sound
-Obsoletes:	pwlib-sound-oss
 
 %description sound-oss
 OSS audio plugin.
@@ -138,7 +130,6 @@ Summary:	v4l2 video input plugin
 Summary(pl.UTF-8): v4l2 wejściowa wtyczka wideo
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	pwlib-video-v4l2
 
 %description video-v4l2
 v4l2 video input plugin.
@@ -193,8 +184,6 @@ dir=$(pwd)
 
 cp -d %{_libdir}/lib*.a $RPM_BUILD_ROOT%{_libdir}
 cp version.h $RPM_BUILD_ROOT%{_includedir}/%{name}
-
-ln -s ptlib $RPM_BUILD_ROOT%{_datadir}/pwlib
 
 sed -i -e 's#PTLIBDIR=.*#PTLIBDIR=%{_datadir}/ptlib#g' $RPM_BUILD_ROOT%{_datadir}/ptlib/make/plugins.mak
 
