@@ -1,6 +1,11 @@
 # TODO:
 #	IPv6 support disabled ('NULL' undeclared)
 #
+# Conditional build:
+%bcond_without	odbc		# Disable ODBC support
+%bcond_without	plugins		# Disable plugins support
+%bcond_without	video		# Disable video support
+#
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
@@ -11,19 +16,20 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.6/%{name}-%{version}.tar
 # Source0-md5:	db7fd581b66998cd76d96f8b7c3f22a1
 License:	MPLv1.0
 Group:		Libraries
-BuildRequires:	SDL-devel
+%{?with_video:BuildRequires:	SDL-devel}
+%if %{with plugins}
 BuildRequires:	alsa-lib-devel
-BuildRequires:	bison
 BuildRequires:	esound-devel
+%endif
+BuildRequires:	bison
 BuildRequires:	expat-devel
 BuildRequires:	flex
 #BuildRequires:	libavc1394-devel
 #BuildRequires:	libdc1394-devel < 2.0.0
 BuildRequires:	libstdc++-devel
-BuildRequires:	openldap-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pkgconfig
-BuildRequires:	unixODBC-devel
+%{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -149,22 +155,34 @@ v4l2 wejściowa wtyczka wideo.
 %setup -q
 
 %build
+# note: --enable-opal influences most of the remaining enable/disable defaults
 %configure \
 		--prefix=%{_prefix} \
-		--enable-alsa \
-		--enable-static \
 		--enable-opal \
+%if %{with plugins}
 		--enable-plugins \
+		--enable-alsa \
 		--enable-esd \
 		--enable-oss \
 		--enable-v4l2 \
 		--enable-v4l \
-		--enable-http \
+%else
+		--disable-plugins \
+		--disable-alsa \
+		--disable-esd \
+		--disable-oss \
+		--disable-v4l2 \
+		--disable-v4l \
+%endif
+		--%{?with_video:en}%{!?with_video:dis}able-video \
+		--%{?with_odbc:en}%{!?with_odbc:dis}able-odbc \
 		--enable-httpforms \
 		--enable-httpsvc \
 		--disable-avc \
 		--disable-dc \
 		--enable-debug
+
+
 dir=$(pwd)
 %{__make} %{?debug:debugshared}%{!?debug:optshared} \
 	PTLIBMAKEDIR="$dir/make" \
@@ -196,10 +214,12 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpt.so.*.*.*
+%if %{with plugins}
 %dir %{_libdir}/%{name}-%{version}
 %dir %{_libdir}/%{name}-%{version}/devices
 %dir %{_libdir}/%{name}-%{version}/devices/sound
 %dir %{_libdir}/%{name}-%{version}/devices/videoinput
+%endif
 
 
 %files devel
@@ -219,6 +239,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_libdir}/lib*.a
 
+%if %{with plugins}
 %files sound-alsa
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/alsa_pwplugin.so
@@ -242,3 +263,4 @@ rm -rf $RPM_BUILD_ROOT
 #%files video-avc
 #%defattr(644,root,root,755)
 #%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/avc_pwplugin.so
+%endif
