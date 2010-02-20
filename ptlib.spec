@@ -31,7 +31,7 @@ BuildRequires:	flex
 #BuildRequires:	libavc1394-devel
 #BuildRequires:	libdc1394-devel < 2.0.0
 BuildRequires:	libstdc++-devel
-%{?with_openssl:	BuildRequires:	openssl-devel}
+%{?with_openssl:BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
