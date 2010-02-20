@@ -2,8 +2,12 @@
 #	IPv6 support disabled ('NULL' undeclared)
 #
 # Conditional build:
+%bcond_without	http		# Disable http support
+%bcond_without	ipv6		# Disable ipv6 support
 %bcond_without	odbc		# Disable ODBC support
 %bcond_without	plugins		# Disable plugins support
+%bcond_without	resolver	# Disable resolver support
+%bcond_without	openssl		# Disable openssl support
 %bcond_without	video		# Disable video support
 #
 Summary:	Portable Tools Library
@@ -27,7 +31,7 @@ BuildRequires:	flex
 #BuildRequires:	libavc1394-devel
 #BuildRequires:	libdc1394-devel < 2.0.0
 BuildRequires:	libstdc++-devel
-BuildRequires:	openssl-devel
+%{?with_openssl:	BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -174,10 +178,20 @@ v4l2 wejściowa wtyczka wideo.
 		--disable-v4l2 \
 		--disable-v4l \
 %endif
-		--%{?with_video:en}%{!?with_video:dis}able-video \
-		--%{?with_odbc:en}%{!?with_odbc:dis}able-odbc \
+%if %{with http}
+		--enable-http \
 		--enable-httpforms \
 		--enable-httpsvc \
+%else
+		--disable-http \
+		--disable-httpforms \
+		--disable-httpsvc \
+%endif
+		--%{?with_ipv6:en}%{!?with_ipv6:dis}able-ipv6 \
+		--%{?with_odbc:en}%{!?with_odbc:dis}able-odbc \
+		--%{?with_resolver:en}%{!?with_resolver:dis}able-resolver \
+		--%{?with_openssl:en}%{!?with_openssl:dis}able-openssl \
+		--%{?with_video:en}%{!?with_video:dis}able-video \
 		--disable-avc \
 		--disable-dc \
 		--enable-debug
