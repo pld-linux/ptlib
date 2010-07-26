@@ -13,11 +13,11 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.6.5
-Release:	9
+Version:	2.6.7
+Release:	1
 URL:		http://www.opalvoip.org/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.6/%{name}-%{version}.tar.bz2
-# Source0-md5:	db7fd581b66998cd76d96f8b7c3f22a1
+# Source0-md5:	37279b5cf4aa64890eb9f38b4500ec6f
 License:	MPLv1.0
 Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
