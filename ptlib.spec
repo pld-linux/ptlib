@@ -23,7 +23,7 @@ Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
 %if %{with plugins}
 BuildRequires:	alsa-lib-devel
-BuildRequires:	esound-devel
+BuildRequires:	libv4l-devel
 %endif
 BuildRequires:	bison
 BuildRequires:	expat-devel
@@ -97,19 +97,6 @@ Alsa audio plugin.
 %description sound-alsa -l pl.UTF-8
 Alsa wtyczka audio.
 
-%package sound-esd
-Summary:	Esound audio plugin
-Summary(pl.UTF-8):	Esound wtyczka audio
-Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Provides:	%{name}-sound
-
-%description sound-esd
-Esound audio plugin.
-
-%description sound-esd -l pl.UTF-8
-Esound wtyczka audio.
-
 %package sound-oss
 Summary:	OSS audio plugin
 Summary(pl.UTF-8): OSS wtyczka audio
@@ -166,18 +153,17 @@ v4l2 wejściowa wtyczka wideo.
 %if %{with plugins}
 		--enable-plugins \
 		--enable-alsa \
-		--enable-esd \
 		--enable-oss \
 		--enable-v4l2 \
 		--enable-v4l \
 %else
 		--disable-plugins \
 		--disable-alsa \
-		--disable-esd \
 		--disable-oss \
 		--disable-v4l2 \
 		--disable-v4l \
 %endif
+		--disable-esd \
 %if %{with http}
 		--enable-http \
 		--enable-httpforms \
@@ -257,10 +243,6 @@ rm -rf $RPM_BUILD_ROOT
 %files sound-alsa
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/alsa_pwplugin.so
-
-%files sound-esd
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/esd_pwplugin.so
 
 %files sound-oss
 %defattr(644,root,root,755)
