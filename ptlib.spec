@@ -13,11 +13,11 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.6.7
+Version:	2.8.2
 Release:	1
 URL:		http://www.opalvoip.org/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/ptlib/2.6/%{name}-%{version}.tar.bz2
-# Source0-md5:	37279b5cf4aa64890eb9f38b4500ec6f
+Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
+# Source0-md5:	3248cbea1af92439a10a4ef15824e9e3
 License:	MPLv1.0
 Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
@@ -97,9 +97,22 @@ Alsa audio plugin.
 %description sound-alsa -l pl.UTF-8
 Alsa wtyczka audio.
 
+%package sound-pulse
+Summary:	Pulse audio plugin
+Summary(pl.UTF-8):	Pulse wtyczka audio
+Group:		Libraries
+Requires:	%{name} = %{version}-%{release}
+Provides:	%{name}-sound
+
+%description sound-pulse
+Alsa audio plugin.
+
+%description sound-pulse -l pl.UTF-8
+Alsa wtyczka audio.
+
 %package sound-oss
 Summary:	OSS audio plugin
-Summary(pl.UTF-8): OSS wtyczka audio
+Summary(pl.UTF-8):	OSS wtyczka audio
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Provides:	%{name}-sound
@@ -124,7 +137,7 @@ v4l wejściowa wtyczka wideo.
 
 %package video-v4l2
 Summary:	v4l2 video input plugin
-Summary(pl.UTF-8): v4l2 wejściowa wtyczka wideo
+Summary(pl.UTF-8):	v4l2 wejściowa wtyczka wideo
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 
@@ -134,13 +147,9 @@ v4l2 video input plugin.
 %description video-v4l2 -l pl.UTF-8
 v4l2 wejściowa wtyczka wideo.
 
-#%package video-avc
-#Summary:	AVC 1394 video input plugin
-#Group:		Libraries
-#Requires:	%{name} = %{version}-%{release}
-#
-#%description video-avc
-#AVC 1394 video input plugin.
+#%package video-avc #Summary: AVC 1394 video input plugin #Group:
+Libraries #Requires: %{name} = %{version}-%{release} # #%description
+video-avc #AVC 1394 video input plugin.
 
 %prep
 %setup -q
@@ -221,7 +230,6 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/%{name}-%{version}/devices/videoinput
 %endif
 
-
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libpt*.so
@@ -243,6 +251,10 @@ rm -rf $RPM_BUILD_ROOT
 %files sound-alsa
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/alsa_pwplugin.so
+
+%files sound-pulse
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/pulse_pwplugin.so
 
 %files sound-oss
 %defattr(644,root,root,755)
