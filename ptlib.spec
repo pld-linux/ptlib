@@ -24,6 +24,7 @@ Group:		Libraries
 %if %{with plugins}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	libv4l-devel
+BuildRequires:	pulseaudio-devel
 %endif
 BuildRequires:	bison
 BuildRequires:	expat-devel
