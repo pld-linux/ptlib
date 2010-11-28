@@ -35,6 +35,7 @@ BuildRequires:	libstdc++-devel
 %{?with_openssl:BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
 %{?with_odbc:BuildRequires:	unixODBC-devel}
+Obsoletes:	ptlib-sound-esd
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
