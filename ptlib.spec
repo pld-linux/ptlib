@@ -1,5 +1,3 @@
-# TODO:
-#	IPv6 support disabled ('NULL' undeclared)
 #
 # Conditional build:
 %bcond_without	http		# Disable http support
@@ -18,6 +16,7 @@ Release:	1
 URL:		http://www.opalvoip.org/
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	39d53e09a698bd6099088b4465cfc841
+Patch0:		%{name}-std_allocator.patch
 License:	MPLv1.0
 Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
@@ -155,6 +154,7 @@ video-avc #AVC 1394 video input plugin.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
@@ -196,9 +196,11 @@ video-avc #AVC 1394 video input plugin.
 
 dir=$(pwd)
 %{__make} %{?debug:debugshared}%{!?debug:optshared} \
+	V=1 \
 	PTLIBMAKEDIR="$dir/make" \
 	PTLIBDIR="$dir" \
-	OPTCCFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG}"\
+	CFLAGS="%{rpmcflags} %{!?debug:-DNDEBUG} -DUSE_GCC" \
+	LDFLAGS="%{rpmcflags} %{rpmldflags} %{!?debug:-DNDEBUG}" \
 	CXX="%{__cxx}"
 
 
@@ -209,12 +211,15 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}/%{name}}
 
 dir=$(pwd)
 %{__make} install \
+	V=1 \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cp -d %{_libdir}/lib*.a $RPM_BUILD_ROOT%{_libdir}
 cp version.h $RPM_BUILD_ROOT%{_includedir}/%{name}
 
 sed -i -e 's#PTLIBDIR=.*#PTLIBDIR=%{_datadir}/ptlib#g' $RPM_BUILD_ROOT%{_datadir}/ptlib/make/plugins.mak
+
+chmod a+x $RPM_BUILD_ROOT%{_libdir}/lib*.so.*
+find $RPM_BUILD_ROOT%{_libdir}/ptlib-* -name '*.so' | xargs chmod a+x
 
 %clean
 rm -rf $RPM_BUILD_ROOT
