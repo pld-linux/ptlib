@@ -87,7 +87,7 @@ Pliki nagłówkowe i biblioteki dla aplikacji korzystających z ptlib.
 Summary:	PTLib (Portable Tools Library) static libraries
 Summary(pl.UTF-8):	Biblioteki statyczne PTLib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 
 %description static
