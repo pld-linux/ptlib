@@ -16,6 +16,7 @@ Release:	1
 URL:		http://www.opalvoip.org/
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	0293a9029fe4164bb63ff8ca15db8703
+Patch0:		%{name}-std_allocator.patch
 License:	MPLv1.0
 Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
@@ -153,6 +154,7 @@ video-avc #AVC 1394 video input plugin.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
