@@ -151,7 +151,7 @@ v4l wejściowa wtyczka wideo.
 Summary:	v4l2 video input plugin
 Summary(pl.UTF-8):	v4l2 wejściowa wtyczka wideo
 Group:		Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description video-v4l2
 v4l2 video input plugin.
@@ -162,7 +162,7 @@ v4l2 wejściowa wtyczka wideo.
 %package video-avc 
 Summary: AVC 1394 video input plugin 
 Group: Libraries 
-Requires: %{name} = %{epoch}%{version}-%{release}
+Requires: %{name} = %{epoch}:%{version}-%{release}
 
 %description video-avc 
 AVC 1394 video input plugin.
