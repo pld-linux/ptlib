@@ -70,7 +70,7 @@ na to ochotę.
 Summary:	PTLib (Portable Tools Library) development files
 Summary(pl.UTF-8):	PTLib pliki deweloperskie
 Group:		Development/Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 
 %description devel
@@ -83,7 +83,7 @@ Pliki nagłówkowe i biblioteki dla aplikacji korzystających z ptlib.
 Summary:	PTLib (Portable Tools Library) static libraries
 Summary(pl.UTF-8):	Biblioteki statyczne PTLib
 Group:		Development/Libraries
-Requires:	%{name}-devel = %{version}-%{release}
+Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
 
 %description static
@@ -96,7 +96,7 @@ Biblioteki statyczne PTLib.
 Summary:	Alsa audio plugin
 Summary(pl.UTF-8):	Alsa wtyczka audio
 Group:		Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-alsa
@@ -109,7 +109,7 @@ Alsa wtyczka audio.
 Summary:	Pulse audio plugin
 Summary(pl.UTF-8):	Pulse wtyczka audio
 Group:		Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-pulse
@@ -122,7 +122,7 @@ Alsa wtyczka audio.
 Summary:	OSS audio plugin
 Summary(pl.UTF-8):	OSS wtyczka audio
 Group:		Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-oss
@@ -135,7 +135,7 @@ OSS wtyczka audio.
 Summary:	v4l video input plugin
 Summary(pl.UTF-8):	v4l wejściowa wtyczka wideo
 Group:		Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description video-v4l
 v4l video input plugin.
@@ -147,7 +147,7 @@ v4l wejściowa wtyczka wideo.
 Summary:	v4l2 video input plugin
 Summary(pl.UTF-8):	v4l2 wejściowa wtyczka wideo
 Group:		Libraries
-Requires:	%{name} = %{epoch}%{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description video-v4l2
 v4l2 video input plugin.
@@ -158,7 +158,7 @@ v4l2 wejściowa wtyczka wideo.
 %package video-avc
 Summary: AVC 1394 video input plugin
 Group: Libraries
-Requires: %{name} = %{epoch}%{version}-%{release}
+Requires: %{name} = %{epoch}:%{version}-%{release}
 
 %description video-avc
 AVC 1394 video input plugin.
