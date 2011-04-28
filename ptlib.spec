@@ -1,4 +1,14 @@
 #
+# Warning: OPAL and Ekiga are very fragile to ptlib version changes
+#	even if they compile with newer ptlib that recommended
+#	things may not work properly. Do not upgrade without testing!
+#
+#	Recommended versions for Ekiga can be found at:
+#		http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#
+#	As for 2011-04-28 ptlib-2.6.x is recommended for for stable ekiga (3.2)
+#	but it seems to work with ptlib-2.8 too.
+#
 # Conditional build:
 %bcond_without	http		# Disable http support
 %bcond_without	ipv6		# Disable ipv6 support
@@ -13,6 +23,7 @@ Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.8.3
 Release:	1
+Epoch:		1
 URL:		http://www.opalvoip.org/
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	0293a9029fe4164bb63ff8ca15db8703
@@ -63,7 +74,7 @@ na to ochotę.
 Summary:	PTLib (Portable Tools Library) development files
 Summary(pl.UTF-8):	PTLib pliki deweloperskie
 Group:		Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 
 %description devel
@@ -89,7 +100,7 @@ Biblioteki statyczne PTLib.
 Summary:	Alsa audio plugin
 Summary(pl.UTF-8):	Alsa wtyczka audio
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-alsa
@@ -102,7 +113,7 @@ Alsa wtyczka audio.
 Summary:	Pulse audio plugin
 Summary(pl.UTF-8):	Pulse wtyczka audio
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-pulse
@@ -115,7 +126,7 @@ Alsa wtyczka audio.
 Summary:	OSS audio plugin
 Summary(pl.UTF-8):	OSS wtyczka audio
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-oss
@@ -128,7 +139,7 @@ OSS wtyczka audio.
 Summary:	v4l video input plugin
 Summary(pl.UTF-8):	v4l wejściowa wtyczka wideo
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description video-v4l
 v4l video input plugin.
@@ -140,7 +151,7 @@ v4l wejściowa wtyczka wideo.
 Summary:	v4l2 video input plugin
 Summary(pl.UTF-8):	v4l2 wejściowa wtyczka wideo
 Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}%{version}-%{release}
 
 %description video-v4l2
 v4l2 video input plugin.
@@ -148,9 +159,13 @@ v4l2 video input plugin.
 %description video-v4l2 -l pl.UTF-8
 v4l2 wejściowa wtyczka wideo.
 
-#%package video-avc #Summary: AVC 1394 video input plugin #Group:
-Libraries #Requires: %{name} = %{version}-%{release} # #%description
-video-avc #AVC 1394 video input plugin.
+%package video-avc 
+Summary: AVC 1394 video input plugin 
+Group: Libraries 
+Requires: %{name} = %{epoch}%{version}-%{release}
+
+%description video-avc 
+AVC 1394 video input plugin.
 
 %prep
 %setup -q
@@ -275,7 +290,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/v4l2_pwplugin.so
 
-#%files video-avc
-#%defattr(644,root,root,755)
-#%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/avc_pwplugin.so
+%if 0
+%files video-avc
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/avc_pwplugin.so
+%endif
 %endif
