@@ -17,6 +17,8 @@
 %bcond_without	resolver	# Disable resolver support
 %bcond_without	openssl		# Disable openssl support
 %bcond_without	video		# Disable video support
+%bcond_with	v4l		# Enable v4l (not v4l2) support.
+                                # won't build with recent linux-libc-headers 
 #
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
@@ -187,7 +189,7 @@ AVC 1394 video input plugin.
 		--disable-alsa \
 		--disable-oss \
 		--disable-v4l2 \
-		--disable-v4l \
+		--%{?with_v4l:en}%{!?with_v4l:dis}able-v4l \
 %endif
 		--disable-esd \
 %if %{with http}
@@ -282,9 +284,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/oss_pwplugin.so
 
+%if %{with v4l}
 %files video-v4l
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/v4l_pwplugin.so
+%endif
 
 %files video-v4l2
 %defattr(644,root,root,755)
