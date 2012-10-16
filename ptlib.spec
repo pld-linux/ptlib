@@ -18,11 +18,12 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.10.8
-Release:	1
+Release:	2
 Epoch:		1
 URL:		http://www.opalvoip.org/
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	ab753e3e0125415caa1861c6ae22623f
+Patch0:		ptlib-2.10.8-svn-revision.patch
 License:	MPLv1.0
 Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
@@ -153,6 +154,7 @@ AVC 1394 video input plugin.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
