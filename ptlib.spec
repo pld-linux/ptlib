@@ -17,13 +17,12 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.10.0
-Release:	0.1
+Version:	2.10.7
+Release:	1
 Epoch:		1
 URL:		http://www.opalvoip.org/
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	39d53e09a698bd6099088b4465cfc841
-Patch0:		%{name}-std_allocator.patch
+# Source0-md5:	7fb74a97743fcc5f33d0f97dec7bc878
 License:	MPLv1.0
 Group:		Libraries
 %{?with_video:BuildRequires:	SDL-devel}
@@ -42,6 +41,7 @@ BuildRequires:	libstdc++-devel
 BuildRequires:	pkgconfig
 %{?with_odbc:BuildRequires:	unixODBC-devel}
 Obsoletes:	ptlib-sound-esd
+Obsoletes:	ptlib-video-v4l
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -131,18 +131,6 @@ OSS audio plugin.
 %description sound-oss -l pl.UTF-8
 OSS wtyczka audio.
 
-%package video-v4l
-Summary:	v4l video input plugin
-Summary(pl.UTF-8):	v4l wejściowa wtyczka wideo
-Group:		Libraries
-Requires:	%{name} = %{epoch}:%{version}-%{release}
-
-%description video-v4l
-v4l video input plugin.
-
-%description video-v4l -l pl.UTF-8
-v4l wejściowa wtyczka wideo.
-
 %package video-v4l2
 Summary:	v4l2 video input plugin
 Summary(pl.UTF-8):	v4l2 wejściowa wtyczka wideo
@@ -165,7 +153,6 @@ AVC 1394 video input plugin.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
@@ -177,14 +164,13 @@ AVC 1394 video input plugin.
 		--enable-alsa \
 		--enable-oss \
 		--enable-v4l2 \
-		--enable-v4l \
 %else
 		--disable-plugins \
 		--disable-alsa \
 		--disable-oss \
 		--disable-v4l2 \
-		--disable-v4l \
 %endif
+		--disable-v4l \
 		--disable-esd \
 %if %{with http}
 		--enable-http \
@@ -277,10 +263,6 @@ rm -rf $RPM_BUILD_ROOT
 %files sound-oss
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/oss_pwplugin.so
-
-%files video-v4l
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/v4l_pwplugin.so
 
 %files video-v4l2
 %defattr(644,root,root,755)
