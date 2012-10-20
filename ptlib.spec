@@ -20,12 +20,12 @@ Name:		ptlib
 Version:	2.10.8
 Release:	2
 Epoch:		1
-URL:		http://www.opalvoip.org/
+License:	MPL v1.0
+Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	ab753e3e0125415caa1861c6ae22623f
 Patch0:		ptlib-2.10.8-svn-revision.patch
-License:	MPLv1.0
-Group:		Libraries
+URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
 %if %{with plugins}
 BuildRequires:	alsa-lib-devel
@@ -73,7 +73,6 @@ Summary(pl.UTF-8):	PTLib pliki deweloperskie
 Group:		Development/Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
-
 %description devel
 Header files and libraries for developing applications that use ptlib.
 
@@ -86,7 +85,6 @@ Summary(pl.UTF-8):	Biblioteki statyczne PTLib
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{epoch}:%{version}-%{release}
 
-
 %description static
 PTLib (Portable Tools Library) static libraries.
 
@@ -94,63 +92,67 @@ PTLib (Portable Tools Library) static libraries.
 Biblioteki statyczne PTLib.
 
 %package sound-alsa
-Summary:	Alsa audio plugin
-Summary(pl.UTF-8):	Alsa wtyczka audio
+Summary:	ALSA audio plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka dźwięku ALSA dla biblioteki PTLib
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-alsa
-Alsa audio plugin.
+ALSA audio plugin for PTLib.
 
 %description sound-alsa -l pl.UTF-8
-Alsa wtyczka audio.
+Wtyczka dźwięku ALSA dla biblioteki PTLib.
 
 %package sound-pulse
-Summary:	Pulse audio plugin
-Summary(pl.UTF-8):	Pulse wtyczka audio
+Summary:	Pulse audio plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka dźwięku Pulse dla biblioteki PTLib
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-pulse
-Alsa audio plugin.
+Pulse audio plugin for PTLib.
 
 %description sound-pulse -l pl.UTF-8
-Alsa wtyczka audio.
+Wtyczka dźwięku Pulse dla biblioteki PTLib.
 
 %package sound-oss
-Summary:	OSS audio plugin
-Summary(pl.UTF-8):	OSS wtyczka audio
+Summary:	OSS audio plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka dźwięku OSS dla biblioteki PTLib
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
 %description sound-oss
-OSS audio plugin.
+OSS audio plugin for PTLib.
 
 %description sound-oss -l pl.UTF-8
-OSS wtyczka audio.
+Wtyczka dźwięku OSS dla biblioteki PTLib.
 
 %package video-v4l2
-Summary:	v4l2 video input plugin
-Summary(pl.UTF-8):	v4l2 wejściowa wtyczka wideo
+Summary:	v4l2 video input plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka wejścia obrazu v4l2 dla biblioteki PTLib
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description video-v4l2
-v4l2 video input plugin.
+v4l2 video input plugin for PTLib.
 
 %description video-v4l2 -l pl.UTF-8
-v4l2 wejściowa wtyczka wideo.
+Wtyczka wejścia obrazu v4l2 dla biblioteki PTLib.
 
 %package video-avc
-Summary: AVC 1394 video input plugin
-Group: Libraries
-Requires: %{name} = %{epoch}:%{version}-%{release}
+Summary:	AVC 1394 video input plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description video-avc
-AVC 1394 video input plugin.
+AVC 1394 video input plugin for PTLib.
+
+%description video-avc -l pl.UTF-8
+Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 
 %prep
 %setup -q
@@ -159,39 +161,38 @@ AVC 1394 video input plugin.
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
 %configure \
-		--prefix=%{_prefix} \
-		--enable-opal \
+	--prefix=%{_prefix} \
+	--enable-opal \
 %if %{with plugins}
-		--enable-plugins \
-		--enable-alsa \
-		--enable-oss \
-		--enable-v4l2 \
+	--enable-plugins \
+	--enable-alsa \
+	--enable-oss \
+	--enable-v4l2 \
 %else
-		--disable-plugins \
-		--disable-alsa \
-		--disable-oss \
-		--disable-v4l2 \
+	--disable-plugins \
+	--disable-alsa \
+	--disable-oss \
+	--disable-v4l2 \
 %endif
-		--disable-v4l \
-		--disable-esd \
+	--disable-v4l \
+	--disable-esd \
 %if %{with http}
-		--enable-http \
-		--enable-httpforms \
-		--enable-httpsvc \
+	--enable-http \
+	--enable-httpforms \
+	--enable-httpsvc \
 %else
-		--disable-http \
-		--disable-httpforms \
-		--disable-httpsvc \
+	--disable-http \
+	--disable-httpforms \
+	--disable-httpsvc \
 %endif
-		--%{?with_ipv6:en}%{!?with_ipv6:dis}able-ipv6 \
-		--%{?with_odbc:en}%{!?with_odbc:dis}able-odbc \
-		--%{?with_resolver:en}%{!?with_resolver:dis}able-resolver \
-		--%{?with_openssl:en}%{!?with_openssl:dis}able-openssl \
-		--%{?with_video:en}%{!?with_video:dis}able-video \
-		--disable-avc \
-		--disable-dc \
-		--enable-debug
-
+	--enable-ipv6%{!?with_ipv6:=no} \
+	--enable-odbc%{!?with_odbc:=no} \
+	--enable-openssl%{!?with_openssl:=no} \
+	--enable-resolver%{!?with_resolver:=no} \
+	--enable-video%{!?with_video:=no} \
+	--disable-avc \
+	--disable-dc \
+	--enable-debug
 
 dir=$(pwd)
 %{__make} %{?debug:debugshared}%{!?debug:optshared} \
@@ -202,13 +203,11 @@ dir=$(pwd)
 	LDFLAGS="%{rpmcflags} %{rpmldflags} %{!?debug:-DNDEBUG}" \
 	CXX="%{__cxx}"
 
-
 %install
 rm -rf $RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}/%{name}}
 
-dir=$(pwd)
 %{__make} install \
 	V=1 \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -223,8 +222,8 @@ find $RPM_BUILD_ROOT%{_libdir}/ptlib-* -name '*.so' | xargs chmod a+x
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
 
 %files
 %defattr(644,root,root,755)
@@ -238,20 +237,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libpt*.so
-%dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/make
-%attr(755,root,root) %{_bindir}/*
-%attr(755,root,root) %{_datadir}/%{name}/make/%{name}-config
+%attr(755,root,root) %{_bindir}/ptlib-config
+%attr(755,root,root) %{_libdir}/libpt.so
 %{_includedir}/ptclib
 %{_includedir}/ptlib
-%{_includedir}/*.h
+%{_includedir}/ptbuildopts.h
+%{_includedir}/ptlib.h
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/make
+%attr(755,root,root) %{_datadir}/%{name}/make/%{name}-config
 %{_datadir}/%{name}/make/*.mak
 %{_pkgconfigdir}/%{name}.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/lib*.a
+%{_libdir}/libpt_s.a
 
 %if %{with plugins}
 %files sound-alsa
