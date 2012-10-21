@@ -4,15 +4,20 @@
 #	(it works with ptlib from PTLIB_2_8 branch)
 #	Recommended versions of ptlib and opal can be found at:
 #		http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+# TODO: lua support (needs patching or some lua version packaged as default)
 #
 # Conditional build:
-%bcond_without	http		# Disable http support
-%bcond_without	ipv6		# Disable ipv6 support
-%bcond_without	odbc		# Disable ODBC support
-%bcond_without	plugins		# Disable plugins support
-%bcond_without	resolver	# Disable resolver support
-%bcond_without	openssl		# Disable openssl support
-%bcond_without	video		# Disable video support
+%bcond_without	http		# HTTP support
+%bcond_without	ipv6		# IPv6 support
+%bcond_without	ldap		# LDAP support
+%bcond_without	odbc		# ODBC support
+%bcond_without	openssl		# openssl support
+%bcond_without	plugins		# plugins support
+%bcond_without	resolver	# resolver support
+%bcond_without	video		# video support
+%bcond_with	esd		# EsounD audio support (obsolete)
+%bcond_with	avc1394		# AVC1394 video input plugin [requires old libraw1394]
+%bcond_with	dc1394		# DC1394 video input plugin [requires old libdc1394]
 #
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
@@ -27,21 +32,24 @@ Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 Patch0:		ptlib-2.10.8-svn-revision.patch
 URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
+BuildRequires:	bison
+BuildRequires:	cyrus-sasl-devel
+%{?with_esd:BuildRequires:	esound-devel}
+BuildRequires:	expat-devel
+BuildRequires:	flex
+%{?with_avc1394:BuildRequires:	libavc1394-devel}
+%{?with_dc1394:BuildRequires:	libdc1394-devel < 2.0.0}
+BuildRequires:	libstdc++-devel
+%{?with_ldap:BuildRequires:	openldap-devel}
+%{?with_openssl:BuildRequires:	openssl-devel}
+BuildRequires:	pkgconfig
+%{?with_odbc:BuildRequires:	unixODBC-devel}
 %if %{with plugins}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	libv4l-devel
 BuildRequires:	pulseaudio-devel
 %endif
-BuildRequires:	bison
-BuildRequires:	expat-devel
-BuildRequires:	flex
-#BuildRequires:	libavc1394-devel
-#BuildRequires:	libdc1394-devel < 2.0.0
-BuildRequires:	libstdc++-devel
-%{?with_openssl:BuildRequires:	openssl-devel}
-BuildRequires:	pkgconfig
-%{?with_odbc:BuildRequires:	unixODBC-devel}
-Obsoletes:	ptlib-sound-esd
+%{!?with_esd:Obsoletes:	ptlib-sound-esd}
 Obsoletes:	ptlib-video-v4l
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -104,18 +112,18 @@ ALSA audio plugin for PTLib.
 %description sound-alsa -l pl.UTF-8
 Wtyczka dźwięku ALSA dla biblioteki PTLib.
 
-%package sound-pulse
-Summary:	Pulse audio plugin for PTLib
-Summary(pl.UTF-8):	Wtyczka dźwięku Pulse dla biblioteki PTLib
+%package sound-esd
+Summary:	EsounD audio plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka dźwięku EsounD dla biblioteki PTLib
 Group:		Libraries
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 Provides:	%{name}-sound
 
-%description sound-pulse
-Pulse audio plugin for PTLib.
+%description sound-esd
+EsounD audio plugin for PTLib.
 
-%description sound-pulse -l pl.UTF-8
-Wtyczka dźwięku Pulse dla biblioteki PTLib.
+%description sound-esd -l pl.UTF-8
+Wtyczka dźwięku EsounD dla biblioteki PTLib.
 
 %package sound-oss
 Summary:	OSS audio plugin for PTLib
@@ -129,6 +137,19 @@ OSS audio plugin for PTLib.
 
 %description sound-oss -l pl.UTF-8
 Wtyczka dźwięku OSS dla biblioteki PTLib.
+
+%package sound-pulse
+Summary:	Pulse audio plugin for PTLib
+Summary(pl.UTF-8):	Wtyczka dźwięku Pulse dla biblioteki PTLib
+Group:		Libraries
+Requires:	%{name} = %{epoch}:%{version}-%{release}
+Provides:	%{name}-sound
+
+%description sound-pulse
+Pulse audio plugin for PTLib.
+
+%description sound-pulse -l pl.UTF-8
+Wtyczka dźwięku Pulse dla biblioteki PTLib.
 
 %package video-v4l2
 Summary:	v4l2 video input plugin for PTLib
@@ -161,21 +182,24 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
 %configure \
-	--prefix=%{_prefix} \
-	--enable-opal \
+	--disable-v4l \
 %if %{with plugins}
 	--enable-plugins \
 	--enable-alsa \
+	--enable-avc%{!?with_avc1394:=no} \
+	--enable-dc%{!?with_dc1394:=no} \
+	--enable-esd%{!?with_esd:=no} \
 	--enable-oss \
 	--enable-v4l2 \
 %else
 	--disable-plugins \
 	--disable-alsa \
+	--disable-avc \
+	--disable-dc \
+	--disable-esd \
 	--disable-oss \
 	--disable-v4l2 \
 %endif
-	--disable-v4l \
-	--disable-esd \
 %if %{with http}
 	--enable-http \
 	--enable-httpforms \
@@ -187,12 +211,11 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %endif
 	--enable-ipv6%{!?with_ipv6:=no} \
 	--enable-odbc%{!?with_odbc:=no} \
+	--enable-openldap%{!?with_ldap:=no} \
 	--enable-openssl%{!?with_openssl:=no} \
 	--enable-resolver%{!?with_resolver:=no} \
-	--enable-video%{!?with_video:=no} \
-	--disable-avc \
-	--disable-dc \
-	--enable-debug
+	--enable-sasl%{!?with_sasl:=no} \
+	--enable-video%{!?with_video:=no}
 
 dir=$(pwd)
 %{__make} %{?debug:debugshared}%{!?debug:optshared} \
@@ -258,19 +281,25 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/alsa_pwplugin.so
 
-%files sound-pulse
+%if %{with esd}
+%files sound-esd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/pulse_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/esd_pwplugin.so
+%endif
 
 %files sound-oss
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/oss_pwplugin.so
 
+%files sound-pulse
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/pulse_pwplugin.so
+
 %files video-v4l2
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/v4l2_pwplugin.so
 
-%if 0
+%if %{with avc1394}
 %files video-avc
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/avc_pwplugin.so
