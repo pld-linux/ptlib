@@ -22,13 +22,13 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.10.9
+Version:	2.10.10
 Release:	1
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	a2ec7e8a94c501e7d468cbb8ecc9fdc9
+# Source0-md5:	58df152487cddbc4acd4bd0fb74fd4c0
 URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
 BuildRequires:	bison
