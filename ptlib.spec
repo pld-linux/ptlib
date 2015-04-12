@@ -29,6 +29,7 @@ License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	58df152487cddbc4acd4bd0fb74fd4c0
+Patch0:		bison3.patch
 URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
 BuildRequires:	bison
@@ -176,6 +177,7 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
