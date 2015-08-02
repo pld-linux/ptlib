@@ -2,7 +2,7 @@
 # WARNING: keep compatible with Ekiga releases.
 #	Recommended versions of ptlib and opal can be found at:
 #	http://wiki.ekiga.org/index.php/Download_Ekiga_sources
-#	(for Ekiga 4.0.x it's ptlib 3.10.x + opal 3.10.x)
+#	(for Ekiga 4.0.x it's ptlib 2.10.x + opal 3.10.x)
 # TODO: lua support (needs patching or some lua version packaged as default)
 #
 # Conditional build:
