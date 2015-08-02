@@ -1,15 +1,15 @@
 #
-# WARNING:
-#	stable Ekiga version (3.2.x) crashes with ptlib-2.10.0
-#	(it works with ptlib from PTLIB_2_8 branch)
+# WARNING: keep compatible with Ekiga releases.
 #	Recommended versions of ptlib and opal can be found at:
-#		http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#	http://wiki.ekiga.org/index.php/Download_Ekiga_sources
+#	(for Ekiga 4.0.x it's ptlib 3.10.x + opal 3.10.x)
 # TODO: lua support (needs patching or some lua version packaged as default)
 #
 # Conditional build:
 %bcond_without	http		# HTTP support
 %bcond_without	ipv6		# IPv6 support
 %bcond_without	ldap		# LDAP support
+%bcond_without	lua		# Lua support
 %bcond_without	odbc		# ODBC support
 %bcond_without	openssl		# openssl support
 %bcond_without	plugins		# plugins support
@@ -22,16 +22,19 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.10.10
-Release:	2
+Version:	2.10.11
+Release:	1
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	58df152487cddbc4acd4bd0fb74fd4c0
+# Source0-md5:	eb2fb52c91224483c17dcea6df9c23a3
 Patch0:		bison3.patch
+Patch1:		%{name}-lua.patch
 URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
+BuildRequires:	autoconf >= 2.50
+BuildRequires:	automake
 BuildRequires:	bison
 BuildRequires:	cyrus-sasl-devel
 %{?with_esd:BuildRequires:	esound-devel}
@@ -40,6 +43,7 @@ BuildRequires:	flex
 %{?with_avc1394:BuildRequires:	libavc1394-devel}
 %{?with_dc1394:BuildRequires:	libdc1394-devel < 2.0.0}
 BuildRequires:	libstdc++-devel
+%{?with_lua:BuildRequires:	lua52-devel >= 5.2}
 %{?with_ldap:BuildRequires:	openldap-devel}
 %{?with_openssl:BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
@@ -178,9 +182,13 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
+%{__aclocal}
+%{__autoconf}
 # note: --enable-opal influences most of the remaining enable/disable defaults
+%{?with_lua:CPPFLAGS="%{rpmcppflags} -I/usr/include/lua5.2"}
 %configure \
 	--disable-v4l \
 %if %{with plugins}
@@ -189,6 +197,7 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 	--enable-avc%{!?with_avc1394:=no} \
 	--enable-dc%{!?with_dc1394:=no} \
 	--enable-esd%{!?with_esd:=no} \
+	--enable-lua%{!?with_lua:=no} \
 	--enable-oss \
 	--enable-v4l2 \
 %else
@@ -270,7 +279,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/%{name}/make
 %attr(755,root,root) %{_datadir}/%{name}/make/%{name}-config
 %{_datadir}/%{name}/make/*.mak
-%{_pkgconfigdir}/%{name}.pc
+%{_pkgconfigdir}/ptlib.pc
 
 %files static
 %defattr(644,root,root,755)
