@@ -3,17 +3,17 @@
 #	Recommended versions of ptlib and opal can be found at:
 #	http://wiki.ekiga.org/index.php/Download_Ekiga_sources
 #	(for Ekiga 4.0.x it's ptlib 2.10.x + opal 3.10.x)
-# TODO: lua support (needs patching or some lua version packaged as default)
 #
 # Conditional build:
 %bcond_without	http		# HTTP support
 %bcond_without	ipv6		# IPv6 support
 %bcond_without	ldap		# LDAP support
-%bcond_without	lua		# Lua support
+%bcond_without	lua		# Lua script support
 %bcond_without	odbc		# ODBC support
 %bcond_without	openssl		# openssl support
 %bcond_without	plugins		# plugins support
 %bcond_without	resolver	# resolver support
+%bcond_without	sasl		# SASL support
 %bcond_without	video		# video support
 %bcond_with	esd		# EsounD audio support (obsolete)
 %bcond_with	avc1394		# AVC1394 video input plugin [requires old libraw1394]
@@ -36,7 +36,7 @@ URL:		http://www.opalvoip.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	bison
-BuildRequires:	cyrus-sasl-devel
+%{?with_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?with_esd:BuildRequires:	esound-devel}
 BuildRequires:	expat-devel
 BuildRequires:	flex
