@@ -23,7 +23,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.10.11
-Release:	2
+Release:	3
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
