@@ -9,7 +9,7 @@
 %bcond_without	ipv6		# IPv6 support
 %bcond_without	ldap		# LDAP support
 %bcond_without	lua		# Lua script support
-%bcond_without	odbc		# ODBC support
+%bcond_with	odbc		# ODBC support
 %bcond_without	openssl		# openssl support
 %bcond_without	plugins		# plugins support
 %bcond_without	resolver	# resolver support
@@ -23,7 +23,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.10.11
-Release:	3
+Release:	4
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
@@ -31,6 +31,10 @@ Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	eb2fb52c91224483c17dcea6df9c23a3
 Patch0:		bison3.patch
 Patch1:		%{name}-lua.patch
+Patch2:		disable-sslv3.patch
+Patch3:		openssl-1.1.0.patch
+Patch4:		gcc-5_support
+Patch5:		glibc.patch
 URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf >= 2.50
@@ -183,12 +187,17 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 %build
 %{__aclocal}
 %{__autoconf}
 # note: --enable-opal influences most of the remaining enable/disable defaults
-%{?with_lua:CPPFLAGS="%{rpmcppflags} -I/usr/include/lua5.2"}
+CPPFLAGS="%{rpmcppflags} -Wno-misleading-indentation -std=gnu++98"
+%{?with_lua:CPPFLAGS="$CPPFLAGS -I/usr/include/lua5.2"}
 %configure \
 	--disable-v4l \
 %if %{with plugins}
