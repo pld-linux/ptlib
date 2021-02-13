@@ -22,19 +22,13 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.10.11
-Release:	4
+Version:	2.18.6
+Release:	1
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	eb2fb52c91224483c17dcea6df9c23a3
-Patch0:		bison3.patch
-Patch1:		%{name}-lua.patch
-Patch2:		disable-sslv3.patch
-Patch3:		openssl-1.1.0.patch
-Patch4:		gcc-5_support
-Patch5:		glibc.patch
+# Source0-md5:	b0eeaef41e0bf8da8d046c22d9dd0c8d
 URL:		http://www.opalvoip.org/
 %{?with_video:BuildRequires:	SDL-devel}
 BuildRequires:	autoconf >= 2.50
@@ -47,7 +41,7 @@ BuildRequires:	flex
 %{?with_avc1394:BuildRequires:	libavc1394-devel}
 %{?with_dc1394:BuildRequires:	libdc1394-devel < 2.0.0}
 BuildRequires:	libstdc++-devel
-%{?with_lua:BuildRequires:	lua52-devel >= 5.2}
+%{?with_lua:BuildRequires:	lua-devel >= 5.4}
 %{?with_ldap:BuildRequires:	openldap-devel}
 %{?with_openssl:BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
@@ -185,20 +179,11 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 %build
-%{__aclocal}
-%{__autoconf}
 # note: --enable-opal influences most of the remaining enable/disable defaults
-CPPFLAGS="%{rpmcppflags} -Wno-misleading-indentation -std=gnu++98"
-%{?with_lua:CPPFLAGS="$CPPFLAGS -I/usr/include/lua5.2"}
 %configure \
+	DSYMUTIL=/bin/true \
 	--disable-v4l \
 %if %{with plugins}
 	--enable-plugins \
@@ -209,6 +194,7 @@ CPPFLAGS="%{rpmcppflags} -Wno-misleading-indentation -std=gnu++98"
 	--enable-lua%{!?with_lua:=no} \
 	--enable-oss \
 	--enable-v4l2 \
+	--enable-pulse \
 %else
 	--disable-plugins \
 	--disable-alsa \
@@ -236,7 +222,7 @@ CPPFLAGS="%{rpmcppflags} -Wno-misleading-indentation -std=gnu++98"
 	--enable-video%{!?with_video:=no}
 
 dir=$(pwd)
-%{__make} %{?debug:debugshared}%{!?debug:optshared} \
+%{__make} \
 	V=1 \
 	PTLIBMAKEDIR="$dir/make" \
 	PTLIBDIR="$dir" \
@@ -247,7 +233,7 @@ dir=$(pwd)
 %install
 rm -rf $RPM_BUILD_ROOT
 
-install -d $RPM_BUILD_ROOT{%{_bindir},%{_libdir},%{_includedir}/%{name}}
+install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/%{name}}
 
 %{__make} install \
 	V=1 \
@@ -271,22 +257,21 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libpt.so.*.*.*
 %if %{with plugins}
 %dir %{_libdir}/%{name}-%{version}
-%dir %{_libdir}/%{name}-%{version}/devices
-%dir %{_libdir}/%{name}-%{version}/devices/sound
-%dir %{_libdir}/%{name}-%{version}/devices/videoinput
+%dir %{_libdir}/%{name}-%{version}/device
+%dir %{_libdir}/%{name}-%{version}/device/sound
+%dir %{_libdir}/%{name}-%{version}/device/videoinput
 %endif
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/ptlib-config
 %attr(755,root,root) %{_libdir}/libpt.so
 %{_includedir}/ptclib
 %{_includedir}/ptlib
-%{_includedir}/ptbuildopts.h
 %{_includedir}/ptlib.h
+%{_includedir}/ptlib_config.h
+%{_includedir}/ptlib_wx.h
 %dir %{_datadir}/%{name}
 %dir %{_datadir}/%{name}/make
-%attr(755,root,root) %{_datadir}/%{name}/make/%{name}-config
 %{_datadir}/%{name}/make/*.mak
 %{_pkgconfigdir}/ptlib.pc
 
@@ -297,29 +282,29 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with plugins}
 %files sound-alsa
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/alsa_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/device/sound/alsa_ptplugin.so
 
 %if %{with esd}
 %files sound-esd
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/esd_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/device/sound/esd_ptplugin.so
 %endif
 
 %files sound-oss
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/oss_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/device/sound/oss_ptplugin.so
 
 %files sound-pulse
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/sound/pulse_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/device/sound/pulse_ptplugin.so
 
 %files video-v4l2
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/v4l2_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/device/videoinput/v4l2_ptplugin.so
 
 %if %{with avc1394}
 %files video-avc
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/%{name}-%{version}/devices/videoinput/avc_pwplugin.so
+%attr(755,root,root) %{_libdir}/%{name}-%{version}/device/videoinput/avc_ptplugin.so
 %endif
 %endif
