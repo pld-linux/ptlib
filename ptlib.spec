@@ -23,7 +23,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.18.6
-Release:	1
+Release:	2
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
@@ -183,6 +183,7 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %build
 # note: --enable-opal influences most of the remaining enable/disable defaults
 %configure \
+	STRIP=/bin/true \
 	DSYMUTIL=/bin/true \
 	--disable-v4l \
 %if %{with plugins}
@@ -237,6 +238,7 @@ install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/%{name}}
 
 %{__make} install \
 	V=1 \
+	STRIP=/bin/true \
 	DESTDIR=$RPM_BUILD_ROOT
 
 cp version.h $RPM_BUILD_ROOT%{_includedir}/%{name}
