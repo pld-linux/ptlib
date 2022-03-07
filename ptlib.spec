@@ -23,7 +23,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.18.6
-Release:	2
+Release:	3
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
@@ -38,6 +38,7 @@ BuildRequires:	bison
 %{?with_esd:BuildRequires:	esound-devel}
 BuildRequires:	expat-devel
 BuildRequires:	flex
+BuildRequires:	gstreamer-devel
 %{?with_avc1394:BuildRequires:	libavc1394-devel}
 %{?with_dc1394:BuildRequires:	libdc1394-devel < 2.0.0}
 BuildRequires:	libstdc++-devel
@@ -51,6 +52,7 @@ BuildRequires:	alsa-lib-devel
 BuildRequires:	libv4l-devel
 BuildRequires:	pulseaudio-devel
 %endif
+BuildConflicts:	gstreamer0.10-devel
 %{!?with_esd:Obsoletes:	ptlib-sound-esd}
 Obsoletes:	ptlib-video-v4l
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
