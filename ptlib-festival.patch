@@ -1,0 +1,21 @@
+--- ptlib-2.18.8/configure.ac.orig	2022-04-16 09:58:39.233407648 +0200
++++ ptlib-2.18.8/configure.ac	2022-04-16 14:18:13.325702214 +0200
+@@ -1982,14 +1982,14 @@ dnl MSWIN_CHECK_DIR  sapi,%ProgramW6432%
+ 
+ MY_LINK_IFELSE(
+    [for Festival support],
+-   [-I/usr/include/speech_tools -fopenmp],
++   [-I/usr/include/EST -fopenmp],
+    [-lFestival -lestools -lestbase -leststring],
+    [#include <festival/festival.h>],
+    [festival_initialize(1, 21000)],
+    [
+-      CPPFLAGS+=" -I/usr/include/speech_tools"
+-      CXXFLAGS+=" -fopenmp"
+-      LIBS+="-lFestival -lestools -lestbase -leststring"
++      CPPFLAGS="$CPPFLAGS -I/usr/include/EST"
++      CXXFLAGS="$CXXFLAGS -fopenmp"
++      LIBS="$LIBS -lFestival -lestools -lestbase -leststring"
+       PTLIB_SUBST(FESTIVAL, 1)
+    ]
+ )

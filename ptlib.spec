@@ -7,6 +7,7 @@
 # Conditional build:
 %bcond_without	http		# HTTP support
 %bcond_without	ipv6		# IPv6 support
+%bcond_without	festival	# Festival TTS support
 %bcond_without	ldap		# LDAP support
 %bcond_without	lua		# Lua script support
 %bcond_with	odbc		# ODBC support
@@ -22,39 +23,49 @@
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
-Version:	2.18.6
-Release:	4
+Version:	2.18.8
+Release:	1
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
-# Source0-md5:	b0eeaef41e0bf8da8d046c22d9dd0c8d
-URL:		http://www.opalvoip.org/
+# Source0-md5:	207f40521cde54a9c4e1e31a9cd8a101
+Patch0:		%{name}-prefer-gst1.patch
+Patch1:		%{name}-festival.patch
+# domain suspended (2022.04)
+#URL:		http://www.opalvoip.org/
+URL:		https://sourceforge.net/projects/opalvoip/
+BuildRequires:	ImageMagick-devel
 %{?with_video:BuildRequires:	SDL-devel}
-BuildRequires:	autoconf >= 2.50
+BuildRequires:	autoconf >= 2.71
 BuildRequires:	automake
 BuildRequires:	bison
 %{?with_sasl:BuildRequires:	cyrus-sasl-devel}
 %{?with_esd:BuildRequires:	esound-devel}
 BuildRequires:	expat-devel
+%{?with_festival:BuildRequires:	festival-devel}
+BuildRequires:	ffmpeg-devel
 BuildRequires:	flex
-BuildRequires:	gstreamer-devel
+BuildRequires:	gstreamer-devel >= 1.0
 %{?with_avc1394:BuildRequires:	libavc1394-devel}
 %{?with_dc1394:BuildRequires:	libdc1394-devel < 2.0.0}
-BuildRequires:	libstdc++-devel
+BuildRequires:	libjpeg-devel
+BuildRequires:	libpcap-devel
+BuildRequires:	libstdc++-devel >= 6:4.7
 %{?with_lua:BuildRequires:	lua-devel >= 5.4}
+BuildRequires:	ncurses-devel
 %{?with_ldap:BuildRequires:	openldap-devel}
 %{?with_openssl:BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
 %{?with_odbc:BuildRequires:	unixODBC-devel}
+BuildRequires:	v8-devel
 %if %{with plugins}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	libv4l-devel
 BuildRequires:	pulseaudio-devel
 %endif
-BuildConflicts:	gstreamer0.10-devel
-%{!?with_esd:Obsoletes:	ptlib-sound-esd}
-Obsoletes:	ptlib-video-v4l
+%{!?with_esd:Obsoletes:	ptlib-sound-esd < %{epoch}:%{version}-%{release}}
+Obsoletes:	ptlib-video-v4l < 1:2.10.7
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -181,12 +192,19 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 %build
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
 # note: --enable-opal influences most of the remaining enable/disable defaults
 %configure \
 	STRIP=/bin/true \
 	DSYMUTIL=/bin/true \
+	--enable-cpp11 \
+	%{!?with_festival:--disable-tts} \
 	--disable-v4l \
 %if %{with plugins}
 	--enable-plugins \
@@ -243,9 +261,9 @@ install -d $RPM_BUILD_ROOT{%{_libdir},%{_includedir}/%{name}}
 	STRIP=/bin/true \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cp version.h $RPM_BUILD_ROOT%{_includedir}/%{name}
+cp -p version.h $RPM_BUILD_ROOT%{_includedir}/%{name}
 
-sed -i -e 's#PTLIBDIR=.*#PTLIBDIR=%{_datadir}/ptlib#g' $RPM_BUILD_ROOT%{_datadir}/ptlib/make/plugins.mak
+%{__sed} -i -e 's#PTLIBDIR=.*#PTLIBDIR=%{_datadir}/ptlib#g' $RPM_BUILD_ROOT%{_datadir}/ptlib/make/plugins.mak
 
 chmod a+x $RPM_BUILD_ROOT%{_libdir}/lib*.so.*
 find $RPM_BUILD_ROOT%{_libdir}/ptlib-* -name '*.so' | xargs chmod a+x

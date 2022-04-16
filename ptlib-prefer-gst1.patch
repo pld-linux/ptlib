@@ -1,0 +1,30 @@
+--- ptlib-2.18.8/configure.ac.orig	2022-03-27 15:56:49.000000000 +0200
++++ ptlib-2.18.8/configure.ac	2022-04-16 08:46:31.900184157 +0200
+@@ -2407,21 +2407,21 @@ dnl MSWIN_CHECK_DIR  gstreamer1,%Program
+ PTLIB_MODULE_OPTION(
+    [GSTREAMER], 
+    [gstreamer],
+-   [GStreamer 0.10 support],
+-   [gstreamer-app-0.10], 
++   [GStreamer 1.0 support],
++   [gio-2.0 gstreamer-app-1.0],
+    [],[],
+    [#include <gst/gst.h>],
+    [gst_version_string()],
+-   [],
++   [AC_DEFINE(P_GSTREAMER_1_0_API, 1)]
+    [PTLIB_MODULE_OPTION(
+       [GSTREAMER],
+       [gstreamer],
+-      [GStreamer 1.0 support],
+-      [gio-2.0 gstreamer-app-1.0],
++      [GStreamer 0.10 support],
++      [gstreamer-app-0.10], 
+       [],[],
+       [#include <gst/gst.h>],
+       [gst_version_string()],
+-      [AC_DEFINE(P_GSTREAMER_1_0_API, 1)]
++      [:]
+    )]
+ )
+ 
