@@ -15,11 +15,15 @@
 %bcond_without	plugins		# plugins support
 %bcond_without	resolver	# resolver support
 %bcond_without	sasl		# SASL support
+%bcond_without	v8		# V8 Javascript support
 %bcond_without	video		# video support
 %bcond_with	esd		# EsounD audio support (obsolete)
 %bcond_with	avc1394		# AVC1394 video input plugin [requires old libraw1394]
 %bcond_with	dc1394		# DC1394 video input plugin [requires old libdc1394]
 #
+%ifnarch %{ix86} %{x8664} %{arm} mips
+%undefine	with_v8
+%endif
 Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
@@ -58,7 +62,7 @@ BuildRequires:	ncurses-devel
 %{?with_openssl:BuildRequires:	openssl-devel}
 BuildRequires:	pkgconfig
 %{?with_odbc:BuildRequires:	unixODBC-devel}
-BuildRequires:	v8-devel
+%{?with_v8:BuildRequires:	v8-devel}
 %if %{with plugins}
 BuildRequires:	alsa-lib-devel
 BuildRequires:	libv4l-devel
@@ -206,6 +210,7 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 	--enable-cpp11 \
 	%{!?with_festival:--disable-tts} \
 	--disable-v4l \
+	%{!?with_v8:--disable-v8} \
 %if %{with plugins}
 	--enable-plugins \
 	--enable-alsa \
