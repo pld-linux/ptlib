@@ -20,6 +20,7 @@
 %bcond_with	esd		# EsounD audio support (obsolete)
 %bcond_with	avc1394		# AVC1394 video input plugin [requires old libraw1394]
 %bcond_with	dc1394		# DC1394 video input plugin [requires old libdc1394]
+%bcond_with	ffmpeg		# FFMPEG support [requires ffmpeg < 5]
 #
 %ifnarch %{ix86} %{x8664} %{arm} mips
 %undefine	with_v8
@@ -28,7 +29,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.18.8
-Release:	1
+Release:	2
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
@@ -36,6 +37,7 @@ Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 # Source0-md5:	207f40521cde54a9c4e1e31a9cd8a101
 Patch0:		%{name}-prefer-gst1.patch
 Patch1:		%{name}-festival.patch
+Patch2:		no-ffmpeg.patch
 # domain suspended (2022.04)
 #URL:		http://www.opalvoip.org/
 URL:		https://sourceforge.net/projects/opalvoip/
@@ -48,7 +50,7 @@ BuildRequires:	bison
 %{?with_esd:BuildRequires:	esound-devel}
 BuildRequires:	expat-devel
 %{?with_festival:BuildRequires:	festival-devel}
-BuildRequires:	ffmpeg-devel
+%{?with_ffmpeg:BuildRequires:	ffmpeg-devel}
 BuildRequires:	flex
 BuildRequires:	gstreamer-devel >= 1.0
 %{?with_avc1394:BuildRequires:	libavc1394-devel}
@@ -198,6 +200,7 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%{!?with_ffmpeg:%patch2 -p1}
 
 %build
 %{__libtoolize}

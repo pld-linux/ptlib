@@ -1,0 +1,107 @@
+--- ptlib-2.18.8/configure.ac~	2023-10-21 00:58:41.000000000 +0200
++++ ptlib-2.18.8/configure.ac	2023-10-21 13:32:49.785184059 +0200
+@@ -1369,104 +1369,6 @@
+ 
+ 
+ dnl ########################################################################
+-dnl check for FFMPEG
+-
+-dnl MSWIN_DISPLAY    ffmpeg32,FFMPEG 32 bit support
+-dnl MSWIN_CHECK_FILE ffmpeg32,include\libavformat\avformat.h,P_FFMPEG_WIN32=1
+-dnl MSWIN_DIR_SYMBOL ffmpeg32,FFMPEG_WIN32_DIR
+-dnl MSWIN_CHECK_DIR  ffmpeg32,%FFMPEG32DIR%\
+-dnl MSWIN_CHECK_DIR  ffmpeg32,..\ffmpeg-win32-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg32,..\external\ffmpeg-win32-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg32,..\..\external\ffmpeg-win32-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg32,%ProgramFiles%\ffmpeg-win32-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg32,%ProgramW6432%\ffmpeg-win32-dev*
+-
+-dnl MSWIN_DISPLAY    ffmpeg64,FFMPEG 64 bit support
+-dnl MSWIN_CHECK_FILE ffmpeg64,include\libavformat\avformat.h,P_FFMPEG_WIN64=1
+-dnl MSWIN_DIR_SYMBOL ffmpeg64,FFMPEG_WIN64_DIR
+-dnl MSWIN_CHECK_DIR  ffmpeg64,%FFMPEG64DIR%\
+-dnl MSWIN_CHECK_DIR  ffmpeg64,..\ffmpeg-win64-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg64,..\external\ffmpeg-win64-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg64,..\..\external\ffmpeg-win64-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg64,%ProgramFiles%\ffmpeg-win64-dev*
+-dnl MSWIN_CHECK_DIR  ffmpeg64,%ProgramW6432%\ffmpeg-win64-dev*
+-
+-dnl MSWIN_DISPLAY    ffmpeg32wb,FFMPEG 32 bit support (Win-Builds)
+-dnl MSWIN_IF_FEATURE ffmpeg32wb,!ffmpeg32
+-dnl MSWIN_CHECK_FILE ffmpeg32wb,include\libavformat\avformat.h,P_FFMPEG_WINBUILDS_WIN32=1
+-dnl MSWIN_DIR_SYMBOL ffmpeg32wb,FFMPEG_WINBUILDS_WIN32_DIR
+-dnl MSWIN_CHECK_DIR  ffmpeg32wb,%WINBUILDSDIR%\
+-dnl MSWIN_CHECK_DIR  ffmpeg32wb,..\Win-Builds\
+-dnl MSWIN_CHECK_DIR  ffmpeg32wb,..\external\Win-Builds\
+-dnl MSWIN_CHECK_DIR  ffmpeg32wb,..\..\external\Win-Builds\
+-dnl MSWIN_CHECK_DIR  ffmpeg32wb,\Win-Builds\
+-
+-dnl MSWIN_DISPLAY    ffmpeg64wb,FFMPEG 64 bit support (Win-Builds)
+-dnl MSWIN_IF_FEATURE ffmpeg64wb,!ffmpeg64
+-dnl MSWIN_CHECK_FILE ffmpeg64wb,include\libavformat\avformat.h,P_FFMPEG_WINBUILDS_WIN64=1
+-dnl MSWIN_DIR_SYMBOL ffmpeg64wb,FFMPEG_WINBUILDS_WIN64_DIR
+-dnl MSWIN_CHECK_DIR  ffmpeg64wb,%WINBUILDSDIR%\
+-dnl MSWIN_CHECK_DIR  ffmpeg64wb,..\Win-Builds\
+-dnl MSWIN_CHECK_DIR  ffmpeg64wb,..\external\Win-Builds\
+-dnl MSWIN_CHECK_DIR  ffmpeg64wb,..\..\external\Win-Builds\
+-dnl MSWIN_CHECK_DIR  ffmpeg64wb,\Win-Builds\
+-
+-
+-AC_LANG_PUSH(C)
+-
+-oldLIBS="$LIBS"
+-CFLAGS="$CFLAGS -D__STDC_CONSTANT_MACROS"
+-
+-MY_PKG_CHECK_MODULE(
+-   [LIBAVUTIL],
+-   [libavutil >= 55],
+-   [#include <libavutil/avutil.h>],
+-   [avutil_version()],
+-   [HAS_LIBAVUTIL=1]
+-)
+-
+-MY_PKG_CHECK_MODULE(
+-   [LIBSWRESAMPLE],
+-   [libswresample],
+-   [#include <libswresample/swresample.h>],
+-   [swresample_version()],
+-   [HAS_LIBSWRESAMPLE=1]
+-)
+-
+-MY_PKG_CHECK_MODULE(
+-   [LIBSWSCALE],
+-   [libswscale >= 4],
+-   [#include <libswscale/swscale.h>],
+-   [swscale_version()],
+-   [HAS_LIBSWSCALE=1]
+-)
+-
+-MY_PKG_CHECK_MODULE(
+-   [LIBAVCODEC],
+-   [libavcodec >= 57],
+-   [#include <libavcodec/avcodec.h>],
+-   [avcodec_version()],
+-   [HAS_LIBAVCODEC=1]
+-)
+-
+-MY_PKG_CHECK_MODULE(
+-   [LIBAVFORMAT],
+-   [libavformat >= 57],
+-   [#include <libavformat/avformat.h>],
+-   [avformat_version()],
+-   [HAS_LIBAVFORMAT=1]
+-)
+-
+-if test "$HAS_LIBAVUTIL" = 1 -a "$HAS_LIBSWRESAMPLE" = 1 -a "$HAS_LIBSWSCALE" = 1 -a "$HAS_LIBAVCODEC" = 1 -a "$HAS_LIBAVFORMAT" = 1; then
+-   PTLIB_SUBST(FFMPEG, 1)
+-else
+-   LIBS="$oldLIBS"
+-fi
+-
+-AC_LANG_POP(C)
+-
+-
+-dnl ########################################################################
+ dnl check for ImageMagick
+ 
+ dnl MSWIN_DISPLAY    imagemagick,ImageMagick support
