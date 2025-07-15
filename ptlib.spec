@@ -198,8 +198,8 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 %{!?with_ffmpeg:%patch2 -p1}
 
 %build
