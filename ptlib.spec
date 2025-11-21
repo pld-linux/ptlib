@@ -29,7 +29,7 @@ Summary:	Portable Tools Library
 Summary(pl.UTF-8):	Przenośna biblioteka narzędziowa
 Name:		ptlib
 Version:	2.18.8
-Release:	2
+Release:	3
 Epoch:		1
 License:	MPL v1.0
 Group:		Libraries
@@ -38,6 +38,7 @@ Source0:	http://downloads.sourceforge.net/opalvoip/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-prefer-gst1.patch
 Patch1:		%{name}-festival.patch
 Patch2:		no-ffmpeg.patch
+Patch3:		termio.patch
 # domain suspended (2022.04)
 #URL:		http://www.opalvoip.org/
 URL:		https://sourceforge.net/projects/opalvoip/
@@ -200,7 +201,8 @@ Wtyczka wejścia obrazu AVC 1394 dla biblioteki PTLib
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1
-%{!?with_ffmpeg:%patch2 -p1}
+%{!?with_ffmpeg:%patch -P2 -p1}
+%patch -P3 -p1
 
 %build
 %{__libtoolize}

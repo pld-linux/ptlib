@@ -1,0 +1,13 @@
+--- ptlib-2.18.8/src/ptlib/unix/pipechan.cxx~	2020-10-26 19:12:50.000000000 +0100
++++ ptlib-2.18.8/src/ptlib/unix/pipechan.cxx	2025-11-22 00:37:24.789931034 +0100
+@@ -40,10 +40,6 @@
+ #include <fcntl.h>
+ #include <signal.h>
+ 
+-#if defined(P_LINUX) || defined(P_SOLARIS)
+-#include <termio.h>
+-#endif
+-
+ #if defined(P_SOLARIS)
+   #include <sys/filio.h>
+ #endif
